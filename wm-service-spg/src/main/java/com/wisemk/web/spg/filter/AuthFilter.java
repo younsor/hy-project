@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wisemk.web.spg.service.SrvImplAuth;
-import com.wisemk.web.spg.share.Constants;
-import com.wisemk.web.spg.share.JsonResult;
+import com.wisemk.web.spg.share.WConstants;
+import com.wisemk.web.spg.share.WJsonResult;
 
 import cn.zyy.oss.share.OssLog;
 
@@ -30,7 +30,7 @@ public class AuthFilter implements Filter
 {
     private static final OssLog log = new OssLog();
 
-    @Value("${filter.auth.exclude:/mngr/login,/mngr/logout}")
+    @Value("${filter.auth.exclude:/auth/login}")
     private String[]            excludeUrls;
 
     @Autowired
@@ -61,20 +61,20 @@ public class AuthFilter implements Filter
         }
 
         /* token认证 */
-        String token = httpServletRequest.getHeader(Constants.HTTP_HEADER_USER_TOKEN);
-        Integer userId = srvAuth.getUserIdFromToken(token);
+        String token = httpServletRequest.getHeader(WConstants.HTTP_HEADER_USER_TOKEN);
+        Integer userId = srvAuth.getUidFromToken(token);
         if (userId != null && userId > 0)
         {
             /* 将token有效期复位 */
             srvAuth.resetTokenExpireTime(token, userId);
 
-            httpServletRequest.setAttribute(Constants.HTTP_ATTR_USER_ID, userId);
+            httpServletRequest.setAttribute(WConstants.HTTP_ATTR_USER_ID, userId);
             chain.doFilter(request, response);
             return;
         }
 
         /* token认证不通过, 则返回错误 */
-        JsonResult jsonResult = new JsonResult(HttpStatus.UNAUTHORIZED, "login timeout");
+        WJsonResult jsonResult = new WJsonResult(HttpStatus.UNAUTHORIZED, "login timeout");
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setStatus(HttpStatus.OK.value());
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
@@ -92,11 +92,6 @@ public class AuthFilter implements Filter
             }
         }
 
-        if (url.startsWith("/mngr/") || url.startsWith("mngr/") || url.equals("/mngr") || url.equals("mngr"))
-        {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 }

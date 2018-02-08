@@ -1,5 +1,6 @@
 package com.wisemk.web.spg.service;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.wisemk.web.spg.domain.PdUser;
+import com.wisemk.web.spg.domain.User;
 import com.wisemk.web.spg.dto.DtoToken;
-import com.wisemk.web.spg.repo.RepoPdUser;
-import com.wisemk.web.spg.share.Constants;
+import com.wisemk.web.spg.repo.RepoUser;
+import com.wisemk.web.spg.share.WConstants;
 
 import cn.zyy.oss.share.OssFunc;
 import cn.zyy.oss.share.OssLog;
@@ -21,7 +22,7 @@ public class SrvImplAuth
     private static final OssLog log = new OssLog();
 
     @Autowired
-    private RepoPdUser          repoPdUser;
+    private RepoUser            repoPdUser;
 
     @Value("${access.token.expire.seconds}")
     private long                tokenExpireSeconds;
@@ -29,12 +30,25 @@ public class SrvImplAuth
     @Autowired
     private StringRedisTemplate strRedisTemplate;
 
-    public DtoToken login(String account, String passwdMd5)
+    public DtoToken loginCode(String appid, String openId, String sessKey, String unionId, String clentIp)
     {
-        PdUser pdUser = repoPdUser.findByAccountAndPasswordAndIsDel(account, passwdMd5, 0);
+        Date curDate = new Date();
+        User pdUser = repoPdUser.findByOpenidAndIsDel(openId, 0);
         if (null == pdUser)
         {
-            return null;
+            /* 第一次登录小程序, 创建该用户 */
+            pdUser = new User();
+            pdUser.setAppid(appid);
+            pdUser.setOpenid(openId);
+            pdUser.setUnionid(unionId);
+            pdUser.setRegSource("");
+            pdUser.setRegTs(OssFunc.TimeConvert.Date2Format(curDate, OssFunc.TimeConvert.DF_SECOND));
+            pdUser.setRegIp(clentIp);
+            pdUser.setLoginTs(OssFunc.TimeConvert.Date2Format(curDate, OssFunc.TimeConvert.DF_SECOND));
+            pdUser.setLoginIp(clentIp);
+            pdUser.setLoginSessKey(sessKey);
+
+            pdUser = repoPdUser.save(pdUser);
         }
 
         /* 生成token */
@@ -42,20 +56,14 @@ public class SrvImplAuth
 
         DtoToken dtoToken = new DtoToken();
         dtoToken.setId(pdUser.getId());
-        dtoToken.setName(pdUser.getName());
         dtoToken.setToken(token);
 
         return dtoToken;
     }
 
-    public void logout(String token)
+    public boolean isUserExist(int uid)
     {
-        delToken(token);
-    }
-
-    public boolean isPdUserExist(int pdUid)
-    {
-        PdUser pdUser = repoPdUser.findByIdAndIsDel(pdUid, 0);
+        User pdUser = repoPdUser.findByIdAndIsDel(uid, 0);
         if (null == pdUser)
         {
             return false;
@@ -64,12 +72,12 @@ public class SrvImplAuth
         return true;
     }
 
-    public int getUserIdFromToken(String token)
+    public int getUidFromToken(String token)
     {
         String strUserId = strRedisTemplate.opsForValue().get(token);
         if (null == strUserId || strUserId.length() <= 0)
         {
-            return Constants.RET_ERROR;
+            return WConstants.RET_ERROR;
         }
 
         return Integer.parseInt(strUserId);
@@ -92,10 +100,5 @@ public class SrvImplAuth
         strRedisTemplate.opsForValue().set(md5Token, userId + "", tokenExpireSeconds, TimeUnit.SECONDS);
 
         return md5Token;
-    }
-
-    private void delToken(String token)
-    {
-        strRedisTemplate.delete(token);
     }
 }

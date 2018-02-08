@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="wm-example">
+		<class>com.wisemk.web.spg.domain.ConfCity</class>
+		<class>com.wisemk.web.spg.domain.ConfDistrict</class>
+		<class>com.wisemk.web.spg.domain.ConfFreight</class>
+		<class>com.wisemk.web.spg.domain.ConfProvince</class>
+		<class>com.wisemk.web.spg.domain.ConfSubject</class>
+		<class>com.wisemk.web.spg.domain.Good</class>
+		<class>com.wisemk.web.spg.domain.GoodComment</class>
+		<class>com.wisemk.web.spg.domain.GoodDetail</class>
+		<class>com.wisemk.web.spg.domain.GoodType</class>
+		<class>com.wisemk.web.spg.domain.Mall</class>
+		<class>com.wisemk.web.spg.domain.MallAsset</class>
+		<class>com.wisemk.web.spg.domain.MallRoll</class>
+		<class>com.wisemk.web.spg.domain.MallSubject</class>
+		<class>com.wisemk.web.spg.domain.Order</class>
+		<class>com.wisemk.web.spg.domain.OrderGood</class>
+		<class>com.wisemk.web.spg.domain.UserAddress</class>
+		<class>com.wisemk.web.spg.domain.User</class>
+	</persistence-unit>
+</persistence>
