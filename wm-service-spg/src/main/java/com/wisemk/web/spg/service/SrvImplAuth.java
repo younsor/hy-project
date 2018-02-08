@@ -22,7 +22,7 @@ public class SrvImplAuth
     private static final OssLog log = new OssLog();
 
     @Autowired
-    private RepoUser            repoPdUser;
+    private RepoUser            repoUser;
 
     @Value("${access.token.expire.seconds}")
     private long                tokenExpireSeconds;
@@ -33,7 +33,7 @@ public class SrvImplAuth
     public DtoToken loginCode(String appid, String openId, String sessKey, String unionId, String clentIp)
     {
         Date curDate = new Date();
-        User pdUser = repoPdUser.findByOpenidAndIsDel(openId, 0);
+        User pdUser = repoUser.findByOpenidAndDel(openId, 0);
         if (null == pdUser)
         {
             /* 第一次登录小程序, 创建该用户 */
@@ -48,7 +48,7 @@ public class SrvImplAuth
             pdUser.setLoginIp(clentIp);
             pdUser.setLoginSessKey(sessKey);
 
-            pdUser = repoPdUser.save(pdUser);
+            pdUser = repoUser.save(pdUser);
         }
 
         /* 生成token */
@@ -63,7 +63,7 @@ public class SrvImplAuth
 
     public boolean isUserExist(int uid)
     {
-        User pdUser = repoPdUser.findByIdAndIsDel(uid, 0);
+        User pdUser = repoUser.findByIdAndDel(uid, 0);
         if (null == pdUser)
         {
             return false;

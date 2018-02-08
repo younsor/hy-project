@@ -6,7 +6,7 @@ import com.wisemk.web.spg.domain.User;
 
 public interface RepoUser extends JpaRepository<User, Integer>
 {
-    User findByOpenidAndIsDel(String openid, int isDel);
+    User findByOpenidAndDel(String openid, int del);
 
-    User findByIdAndIsDel(Integer id, int isDel);
+    User findByIdAndDel(Integer id, int del);
 }

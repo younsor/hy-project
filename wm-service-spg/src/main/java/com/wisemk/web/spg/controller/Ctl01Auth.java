@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.wisemk.web.spg.dto.DtoToken;
 import com.wisemk.web.spg.service.SrvImplAuth;
+import com.wisemk.web.spg.service.SrvImplMall;
 import com.wisemk.web.spg.share.WHttpReq;
 import com.wisemk.web.spg.share.WJsonResult;
 
@@ -28,7 +29,10 @@ public class Ctl01Auth extends BaseController
     @Autowired
     private SrvImplAuth         srvAuth;
 
-    @PostMapping(value = "/code")
+    @Autowired
+    private SrvImplMall         srvMall;
+
+    @GetMapping(value = "/code")
     public WJsonResult login(String code, String appid)
     {
         if (OssFunc.isEmpty(code))
@@ -36,13 +40,21 @@ public class Ctl01Auth extends BaseController
             return renderError(HttpStatus.UNAUTHORIZED, "code为空");
         }
 
+        /* 获取应用密钥 */
+        String appSecret = srvMall.getSecret(appid);
+        if (OssFunc.isEmpty(appSecret))
+        {
+            return renderError(HttpStatus.UNAUTHORIZED, "appid" + appid + "'s secret null");
+        }
+
         String codeReqUrl = "https://api.weixin.qq.com/sns/jscode2session";
         Map<String, String> mapParam = Maps.newHashMap();
         mapParam.put("appid", appid);
-        mapParam.put("secret", "");
-        mapParam.put("js_code", "");
+        mapParam.put("secret", appSecret);
+        mapParam.put("js_code", code);
         mapParam.put("grant_type", "authorization_code");
         String strRet = WHttpReq.httpsGet(codeReqUrl, mapParam);
+        log.info(strRet);
         if (OssFunc.isEmpty(strRet))
         {
             return renderExc("jscode2session error");

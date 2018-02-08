@@ -30,7 +30,7 @@ public class AuthFilter implements Filter
 {
     private static final OssLog log = new OssLog();
 
-    @Value("${filter.auth.exclude:/auth/login}")
+    @Value("${filter.auth.exclude:/auth/code}")
     private String[]            excludeUrls;
 
     @Autowired

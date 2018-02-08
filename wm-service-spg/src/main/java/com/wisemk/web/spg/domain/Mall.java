@@ -36,6 +36,9 @@ public class Mall implements Serializable
     @Column(length = 256)
     private String            address;
 
+    @Column(nullable = false, length = 32)
+    private String            appid;
+
     @Column(length = 32)
     private String            city;
 
@@ -64,8 +67,14 @@ public class Mall implements Serializable
     @Generated(GenerationTime.INSERT)
     private Timestamp         registrationTime;
 
+    @Column(nullable = false, length = 32)
+    private String            secret;
+
     @Column(nullable = false)
     private int               state;
+
+    @Column(nullable = false, length = 32)
+    private String            tel;
 
     @Column(name = "update_time", nullable = false)
     @Generated(GenerationTime.ALWAYS)
@@ -102,6 +111,16 @@ public class Mall implements Serializable
     public void setAddress(String address)
     {
         this.address = address;
+    }
+
+    public String getAppid()
+    {
+        return this.appid;
+    }
+
+    public void setAppid(String appid)
+    {
+        this.appid = appid;
     }
 
     public String getCity()
@@ -194,6 +213,16 @@ public class Mall implements Serializable
         this.registrationTime = registrationTime;
     }
 
+    public String getSecret()
+    {
+        return this.secret;
+    }
+
+    public void setSecret(String secret)
+    {
+        this.secret = secret;
+    }
+
     public int getState()
     {
         return this.state;
@@ -202,6 +231,16 @@ public class Mall implements Serializable
     public void setState(int state)
     {
         this.state = state;
+    }
+
+    public String getTel()
+    {
+        return this.tel;
+    }
+
+    public void setTel(String tel)
+    {
+        this.tel = tel;
     }
 
     public Timestamp getUpdateTime()
