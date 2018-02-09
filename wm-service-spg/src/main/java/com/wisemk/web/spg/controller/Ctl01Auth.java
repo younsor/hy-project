@@ -61,9 +61,9 @@ public class Ctl01Auth extends BaseController
         }
 
         JSONObject jsonRet = JSONObject.parseObject(strRet);
-        String strOpenId = jsonRet.getString("openid");
-        String strSessKey = jsonRet.getString("session_key");
-        String strUnionId = jsonRet.getString("unionid");
+        String strOpenId = OssFunc.DataConvert.toStr(jsonRet.getString("openid"), "");
+        String strSessKey = OssFunc.DataConvert.toStr(jsonRet.getString("session_key"), "");
+        String strUnionId = OssFunc.DataConvert.toStr(jsonRet.getString("unionid"), "");
         String clientIp = getClientIp();
 
         /* 处理用户信息, 生成此次会话token */
@@ -71,3 +71,4 @@ public class Ctl01Auth extends BaseController
         return renderSuccess(dtoToken);
     }
 }
+
