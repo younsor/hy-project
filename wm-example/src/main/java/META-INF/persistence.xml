@@ -11,12 +11,12 @@
 		<class>com.wisemk.web.spg.domain.GoodDetail</class>
 		<class>com.wisemk.web.spg.domain.GoodType</class>
 		<class>com.wisemk.web.spg.domain.Mall</class>
-		<class>com.wisemk.web.spg.domain.MallAsset</class>
 		<class>com.wisemk.web.spg.domain.MallRoll</class>
 		<class>com.wisemk.web.spg.domain.MallSubject</class>
 		<class>com.wisemk.web.spg.domain.Order</class>
 		<class>com.wisemk.web.spg.domain.OrderGood</class>
 		<class>com.wisemk.web.spg.domain.UserAddress</class>
+		<class>com.wisemk.web.spg.domain.MallAsset</class>
 		<class>com.wisemk.web.spg.domain.User</class>
 	</persistence-unit>
 </persistence>

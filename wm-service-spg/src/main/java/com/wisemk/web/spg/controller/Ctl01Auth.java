@@ -68,7 +68,14 @@ public class Ctl01Auth extends BaseController
 
         /* 处理用户信息, 生成此次会话token */
         DtoToken dtoToken = srvAuth.loginCode(appid, strOpenId, strSessKey, strUnionId, clientIp);
+
+        /* 如果带了老的token, 则删除老的token, 客户端会保存新的token */
+        String strToken = getToken();
+        if (!OssFunc.isEmpty(strToken))
+        {
+            srvAuth.delToken(strToken);
+        }
+
         return renderSuccess(dtoToken);
     }
 }
-

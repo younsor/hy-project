@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -70,7 +69,7 @@ public class MallAsset implements Serializable
     @Generated(GenerationTime.ALWAYS)
     private Timestamp         updateTime;
 
-    @Lob
+    @Column(nullable = false, length = 512)
     private String            value;
 
     public MallAsset()

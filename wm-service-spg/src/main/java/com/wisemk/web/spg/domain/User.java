@@ -60,6 +60,9 @@ public class User implements Serializable
     @Column(name = "login_ts", nullable = false, length = 32)
     private String            loginTs;
 
+    @Column(name = "mall_id", nullable = false)
+    private int               mallId;
+
     @Column(name = "nick_name", length = 64)
     private String            nickName;
 
@@ -91,9 +94,6 @@ public class User implements Serializable
     @Column(name = "update_time", nullable = false)
     @Generated(GenerationTime.ALWAYS)
     private Timestamp         updateTime;
-
-    @Column(name = "wx_account", length = 64)
-    private String            wxAccount;
 
     public User()
     {}
@@ -208,6 +208,16 @@ public class User implements Serializable
         this.loginTs = loginTs;
     }
 
+    public int getMallId()
+    {
+        return this.mallId;
+    }
+
+    public void setMallId(int mallId)
+    {
+        this.mallId = mallId;
+    }
+
     public String getNickName()
     {
         return this.nickName;
@@ -306,16 +316,6 @@ public class User implements Serializable
     public void setUpdateTime(Timestamp updateTime)
     {
         this.updateTime = updateTime;
-    }
-
-    public String getWxAccount()
-    {
-        return this.wxAccount;
-    }
-
-    public void setWxAccount(String wxAccount)
-    {
-        this.wxAccount = wxAccount;
     }
 
 }

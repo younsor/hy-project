@@ -9,4 +9,5 @@ public interface RepoUser extends JpaRepository<User, Integer>
     User findByOpenidAndDel(String openid, int del);
 
     User findByIdAndDel(Integer id, int del);
+
 }

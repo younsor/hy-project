@@ -61,14 +61,14 @@ public class AuthFilter implements Filter
         }
 
         /* token认证 */
-        String token = httpServletRequest.getHeader(WConstants.HTTP_HEADER_USER_TOKEN);
+        String token = httpServletRequest.getHeader(WConstants.HTTP_ATTR_TOKEN);
         Integer userId = srvAuth.getUidFromToken(token);
         if (userId != null && userId > 0)
         {
             /* 将token有效期复位 */
             srvAuth.resetTokenExpireTime(token, userId);
 
-            httpServletRequest.setAttribute(WConstants.HTTP_ATTR_USER_ID, userId);
+            httpServletRequest.setAttribute(WConstants.HTTP_ATTR_USER, userId);
             chain.doFilter(request, response);
             return;
         }

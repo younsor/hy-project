@@ -88,6 +88,11 @@ public class SrvImplAuth
         strRedisTemplate.opsForValue().set(token, userId + "", tokenExpireSeconds, TimeUnit.SECONDS);
     }
 
+    public void delToken(String token)
+    {
+        strRedisTemplate.delete(token);
+    }
+
     private String generateAndSetToken(int userId)
     {
         String md5Key = userId + System.currentTimeMillis() + "";

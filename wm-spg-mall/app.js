@@ -7,15 +7,22 @@ App({
     console.info("start... login...");
     wx.login({
       success: res => {
+        var sessToken = wx.getStorageSync("token");
         wx.request({
           url: that.globalData.url + '/auth/code',
-          data: { code: res.code, appid: that.globalData.appid }, // 设置请求的 参数
-          success: (res) => {
+          data: { 
+            'code': res.code, 
+            'appid': that.globalData.appid 
+          },
+          header: {
+            'X-Wx-Token': sessToken
+          },
+          success: (res) => { 
             console.log("login success, and res.data=" + JSON.stringify(res.data));
 
             //将会话token写入本地缓存
             that.globalData.token = res.data.token;
-            wx.setStorageSync('stgToken', res.data.token);
+            wx.setStorageSync('token', res.data.token);
           }
         });
 
@@ -50,6 +57,7 @@ App({
   },
 
   globalData: {
+    mallName: '门口小店',
     appid: 'wx4d57d80f45aa27c7',
     token: '',
     url: 'http://localhost:3700',
