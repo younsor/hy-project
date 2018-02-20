@@ -2,6 +2,8 @@ package com.wisemk.web.spg.share;
 
 import org.springframework.http.HttpStatus;
 
+import com.alibaba.fastjson.JSON;
+
 public class WJsonResult
 {
     private int    code;
@@ -68,5 +70,10 @@ public class WJsonResult
     public void setData(Object data)
     {
         this.data = data;
+    }
+    
+    public String toJsonString()
+    {
+        return JSON.toJSONString(this, true);
     }
 }

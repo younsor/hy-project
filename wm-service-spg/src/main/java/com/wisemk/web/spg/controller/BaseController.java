@@ -11,13 +11,17 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.wisemk.web.spg.domain.User;
 import com.wisemk.web.spg.repo.RepoUser;
 import com.wisemk.web.spg.share.WConstants;
+import com.wisemk.web.spg.share.WFunc;
 import com.wisemk.web.spg.share.WJsonResult;
 
 import cn.zyy.oss.share.OssFunc;
+import cn.zyy.oss.share.OssLog;
 
 @Controller
 public abstract class BaseController
 {
+    private static final OssLog log = new OssLog();
+    
     @Autowired
     private RepoUser repoUser;
 
@@ -59,6 +63,8 @@ public abstract class BaseController
         WJsonResult result = new WJsonResult();
         result.setCode(HttpStatus.BAD_REQUEST);
         result.setMessage(msg);
+        
+        log.debug(WFunc.logReqRsp(getRequest(), result));
         return result;
     }
 
@@ -67,6 +73,8 @@ public abstract class BaseController
         WJsonResult result = new WJsonResult();
         result.setCode(status);
         result.setMessage(msg);
+        
+        log.debug(WFunc.logReqRsp(getRequest(), result));
         return result;
     }
 
@@ -75,6 +83,8 @@ public abstract class BaseController
         WJsonResult result = new WJsonResult();
         result.setCode(HttpStatus.OK);
         result.setData(obj);
+        
+        log.debug(WFunc.logReqRsp(getRequest(), result));
         return result;
     }
 
@@ -83,6 +93,8 @@ public abstract class BaseController
         WJsonResult result = new WJsonResult();
         result.setCode(HttpStatus.OK);
         result.setMessage("操作成功");
+        
+        log.debug(WFunc.logReqRsp(getRequest(), result));
         return result;
     }
 }

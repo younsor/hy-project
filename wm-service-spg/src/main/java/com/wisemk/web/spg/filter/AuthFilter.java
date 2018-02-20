@@ -2,11 +2,13 @@ package com.wisemk.web.spg.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +59,7 @@ public class AuthFilter implements Filter
         if (!isNeedAuth(httpServletRequest.getServletPath()))
         {
             chain.doFilter(request, response);
+            ServletOutputStream dafdsds = response.getOutputStream();
             return;
         }
 
